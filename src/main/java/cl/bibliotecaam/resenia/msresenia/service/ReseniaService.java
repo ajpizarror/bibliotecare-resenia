@@ -18,8 +18,8 @@ public class ReseniaService {
         return new ReseniaResponseDTO(
                 resenia.getIdResenia(),
                 resenia.getPuntaje(),
+                resenia.getComentario(),
                 resenia.getFechaRese(),
-                resenia.getComentario()
                 resenia.getUsuario().getNumrunUsu()
         );
     }
