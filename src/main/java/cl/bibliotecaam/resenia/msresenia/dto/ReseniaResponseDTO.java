@@ -15,6 +15,6 @@ public class ReseniaResponseDTO {
     private Long puntaje;
     private String comentario;
     private LocalDate fechaRese;
-    private Usuario usuario;
+    private String numrunUsu;
 
 }
