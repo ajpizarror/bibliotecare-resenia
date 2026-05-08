@@ -17,7 +17,7 @@ public class Usuario {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @Column(nullable = false, length = 8)
-    private String numrunUsu;
+    private Long numrunUsu;
     @Column(nullable = false, length = 1)
     private String dvrunUsu;
     @Column(nullable = false,length = 30)
