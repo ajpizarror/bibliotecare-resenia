@@ -1,5 +1,6 @@
 package cl.bibliotecaam.resenia.msresenia.service;
 
+import cl.bibliotecaam.resenia.msresenia.dto.ReseniaRequestDTO;
 import cl.bibliotecaam.resenia.msresenia.dto.ReseniaResponseDTO;
 import cl.bibliotecaam.resenia.msresenia.model.Resenia;
 import cl.bibliotecaam.resenia.msresenia.model.Usuario;
@@ -9,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -52,5 +54,23 @@ public class ReseniaService {
                 .stream()
                 .map(this::mapToDTO)
                 .collect(Collectors.toList());
+    }
+
+    public Resenia guardar(Resenia resenia){
+        return reseniaRepository.save(resenia);
+    }
+
+    public void eliminarPorId(Long id){
+        reseniaRepository.deleteById(id);
+    }
+
+    public Optional<ReseniaResponseDTO> actualizar(Long id, ReseniaRequestDTO doto){
+        return reseniaRepository.findById(id).map(existente -> {
+            existente.setPuntaje(doto.getPuntaje());
+            existente.setComentario(doto.getComentario());
+            existente.setFechaRese(doto.getFechaRese());
+            existente.setUsuario(doto.getUsuario());
+            return mapToDTO(existente);
+        });
     }
 }

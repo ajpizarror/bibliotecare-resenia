@@ -1,5 +1,6 @@
 package cl.bibliotecaam.resenia.msresenia.dto;
 
+import cl.bibliotecaam.resenia.msresenia.model.Usuario;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
@@ -19,7 +20,7 @@ public class ReseniaRequestDTO {
     @NotNull(message = "La fecha es obligatoria.")
     private LocalDate fechaRese;
     @NotNull(message = "La resenia tuvo que haber sido hecha por un usuario.")
-    private Long idUsuario;
+    private Usuario usuario;
 
 
 }
