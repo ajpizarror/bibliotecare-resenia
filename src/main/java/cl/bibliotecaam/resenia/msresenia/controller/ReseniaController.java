@@ -44,14 +44,14 @@ public class ReseniaController {
         return ResponseEntity.status(201).body(reseniaService.guardar(nuevaResenia));
     }
 
-    @PutMapping("{/id]")
+    @PutMapping("/{id}")
     public ResponseEntity<ReseniaResponseDTO> actualizar(@PathVariable Long id, @Valid @RequestBody ReseniaRequestDTO doto){
         return reseniaService.actualizar(id, doto)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
 
-    @DeleteMapping("{/id}")
+    @DeleteMapping("/{id}")
     public ResponseEntity<Void> eliminar (@PathVariable Long id){
         if (reseniaService.obtenerPorId(id).isEmpty()){
             return ResponseEntity.notFound().build();
