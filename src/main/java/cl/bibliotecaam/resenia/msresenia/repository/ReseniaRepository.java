@@ -10,5 +10,5 @@ import java.util.List;
 public interface ReseniaRepository extends JpaRepository<Resenia, Long> {
     List<Resenia> findByPuntaje(Long puntaje);
     List<Resenia> findByFechaRese(LocalDate fecha);
-    List<Resenia> findByUsuario(Usuario usuario);
+    List<Resenia> findByIdUsuario(Long id);
 }

@@ -24,7 +24,7 @@ public class ReseniaService {
                 resenia.getPuntaje(),
                 resenia.getComentario(),
                 resenia.getFechaRese(),
-                resenia.getUsuario().getId()
+                resenia.getIdUsuario()
         );
     }
 
@@ -53,8 +53,8 @@ public class ReseniaService {
                 .collect(Collectors.toList());
     }
 
-    public List<ReseniaResponseDTO> listarPorUsuario(Usuario usuario){
-        return reseniaRepository.findByUsuario(usuario)
+    public List<ReseniaResponseDTO> listarPorUsuario(Long id){
+        return reseniaRepository.findById(id)
                 .stream()
                 .map(this::mapToDTO)
                 .collect(Collectors.toList());
@@ -73,7 +73,7 @@ public class ReseniaService {
             existente.setPuntaje(doto.getPuntaje());
             existente.setComentario(doto.getComentario());
             existente.setFechaRese(doto.getFechaRese());
-            existente.setUsuario(doto.getUsuario());
+            existente.setIdUsuario(doto.getIdUsuario());
             return mapToDTO(existente);
         });
     }

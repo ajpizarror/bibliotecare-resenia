@@ -34,8 +34,8 @@ public class ReseniaController {
         return ResponseEntity.ok(reseniaService.listarPorFecha(fecha));
     }
     @GetMapping("/usuario/{usuario}")
-    public ResponseEntity<List<ReseniaResponseDTO>> obtenerPorUsuario(@RequestBody Usuario usuario){
-        return ResponseEntity.ok(reseniaService.listarPorUsuario(usuario));
+    public ResponseEntity<List<ReseniaResponseDTO>> obtenerPorIdUsuario(@PathVariable Long id){
+        return ResponseEntity.ok(reseniaService.listarPorUsuario(id));
     }
 
     @PostMapping

@@ -23,7 +23,6 @@ public class Resenia {
     private String comentario;
     @Column(nullable = false)
     private LocalDate fechaRese;
-    @OneToOne
-    @JoinColumn(name = "idUsuario", nullable = false)
-    private Usuario usuario;
+    @Column(nullable = false)
+    private Long idUsuario;
 }

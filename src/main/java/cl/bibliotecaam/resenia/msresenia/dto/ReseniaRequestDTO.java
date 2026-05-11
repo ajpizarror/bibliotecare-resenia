@@ -20,7 +20,7 @@ public class ReseniaRequestDTO {
     @NotNull(message = "La fecha es obligatoria.")
     private LocalDate fechaRese;
     @NotNull(message = "La resenia tuvo que haber sido hecha por un usuario.")
-    private Usuario usuario;
+    private Long idUsuario;
 
 
 }
