@@ -28,6 +28,10 @@ public class ReseniaService {
         );
     }
 
+    public Optional<ReseniaResponseDTO> obtenerPorId(Long id){
+        return reseniaRepository.findById(id).map(this::mapToDTO);
+    }
+
     public List<ReseniaResponseDTO> listarTodas(){
         return reseniaRepository.findAll()
                 .stream()

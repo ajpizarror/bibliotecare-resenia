@@ -1,5 +1,6 @@
 package cl.bibliotecaam.resenia.msresenia.controller;
 
+import cl.bibliotecaam.resenia.msresenia.dto.ReseniaRequestDTO;
 import cl.bibliotecaam.resenia.msresenia.dto.ReseniaResponseDTO;
 import cl.bibliotecaam.resenia.msresenia.model.Resenia;
 import cl.bibliotecaam.resenia.msresenia.model.Usuario;
@@ -36,4 +37,27 @@ public class ReseniaController {
     public ResponseEntity<List<ReseniaResponseDTO>> obtenerPorUsuario(@RequestBody Usuario usuario){
         return ResponseEntity.ok(reseniaService.listarPorUsuario(usuario));
     }
+
+    @PostMapping
+    public ResponseEntity<Resenia> guardar(@Valid @RequestBody Resenia resenia){
+        Resenia nuevaResenia = reseniaService.guardar((resenia));
+        return ResponseEntity.status(201).body(reseniaService.guardar(nuevaResenia));
+    }
+
+    @PutMapping("{/id]")
+    public ResponseEntity<ReseniaResponseDTO> actualizar(@PathVariable Long id, @Valid @RequestBody ReseniaRequestDTO doto){
+        return reseniaService.actualizar(id, doto)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
+    }
+
+    @DeleteMapping("{/id}")
+    public ResponseEntity<Void> eliminar (@PathVariable Long id){
+        if (reseniaService.obtenerPorId(id).isEmpty()){
+            return ResponseEntity.notFound().build();
+        }
+        reseniaService.eliminarPorId(id);
+        return ResponseEntity.noContent().build();
+    }
+
 }
