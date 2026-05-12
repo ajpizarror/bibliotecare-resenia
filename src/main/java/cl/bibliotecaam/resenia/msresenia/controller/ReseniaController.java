@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/bibliotecaam/resenias")
@@ -22,6 +23,11 @@ public class ReseniaController {
     @GetMapping
     public ResponseEntity<List<ReseniaResponseDTO>> obtenerTodas(){
         return ResponseEntity.ok(reseniaService.listarTodas());
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<Optional<ReseniaResponseDTO>> obtenerPorId(@PathVariable Long id){
+        return ResponseEntity.ok(reseniaService.obtenerPorId(id));
     }
 
     @GetMapping("/puntaje/{puntaje}")
