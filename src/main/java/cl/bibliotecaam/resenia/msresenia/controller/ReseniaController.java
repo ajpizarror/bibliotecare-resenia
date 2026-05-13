@@ -45,9 +45,8 @@ public class ReseniaController {
     }
 
     @PostMapping
-    public ResponseEntity<Resenia> guardar(@Valid @RequestBody Resenia resenia){
-        Resenia nuevaResenia = reseniaService.guardar((resenia));
-        return ResponseEntity.status(201).body(reseniaService.guardar(nuevaResenia));
+    public ResponseEntity<ReseniaResponseDTO> guardar(@Valid @RequestBody ReseniaRequestDTO doto){
+        return ResponseEntity.status(201).body(reseniaService.guardar(doto));
     }
 
     @PutMapping("/{id}")

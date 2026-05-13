@@ -43,7 +43,7 @@ public class ReseniaService {
             log.info(">>> Usuario {usuarioId} validado correctamente (WebClient)");
         } catch (WebClientResponseException.NotFound e){
             throw new RuntimeException(
-                    "El usuario con id" + usuarioId + "no existe en Usuario");
+                    "El usuario con id {usuarioId} no existe en Usuario");
         } catch (Exception e) {
             throw new RuntimeException(
                     "No se puede conectar con Usuario: " + e.getMessage());
@@ -83,8 +83,16 @@ public class ReseniaService {
                 .collect(Collectors.toList());
     }
 
-    public Resenia guardar(Resenia resenia){
-        return reseniaRepository.save(resenia);
+    public ReseniaResponseDTO guardar(ReseniaRequestDTO doto){
+        validarUsuario(doto.getIdUsuario());
+        Resenia resenia = new Resenia(
+                null,
+                doto.getPuntaje(),
+                doto.getComentario(),
+                doto.getFechaRese(),
+                doto.getIdUsuario()
+        );
+        return mapToDTO(reseniaRepository.save(resenia));
     }
 
     public void eliminarPorId(Long id){
@@ -93,6 +101,7 @@ public class ReseniaService {
 
     public Optional<ReseniaResponseDTO> actualizar(Long id, ReseniaRequestDTO doto){
         return reseniaRepository.findById(id).map(existente -> {
+            validarUsuario(doto.getIdUsuario());
             existente.setPuntaje(doto.getPuntaje());
             existente.setComentario(doto.getComentario());
             existente.setFechaRese(doto.getFechaRese());
