@@ -37,6 +37,10 @@ public class DataInitializer implements CommandLineRunner {
 
         Resenia primeraResenia = reseniaRepository.save(
                 new Resenia(null, 100L, "Muy buen libro", LocalDate.of(2026,5,5), 1L));
+
+        Resenia segundaResenia = reseniaRepository.save(
+                new Resenia(null, 10L, "Pesimo libor", LocalDate.of(2026, 3, 3), 2L));
+
     }
 
 
