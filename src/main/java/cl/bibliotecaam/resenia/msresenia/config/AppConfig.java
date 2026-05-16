@@ -6,10 +6,13 @@ import org.springframework.web.reactive.function.client.WebClient;
 
 public class AppConfig {
     @Value("${usuario.url}")
+    private String usuarioUrl;
 
     @Bean
     public WebClient webClient(){
         return WebClient.builder()
+                .baseUrl(usuarioUrl)
                 .build();
     }
 }
+x
