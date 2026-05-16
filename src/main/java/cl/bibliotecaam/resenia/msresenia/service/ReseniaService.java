@@ -54,7 +54,7 @@ public class ReseniaService {
     }
 
     public List<ReseniaResponseDTO> listarPorUsuario(Long id){
-        return reseniaRepository.findById(id)
+        return reseniaRepository.findByIdUsuario(id)
                 .stream()
                 .map(this::mapToDTO)
                 .collect(Collectors.toList());

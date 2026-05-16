@@ -28,15 +28,20 @@ public class DataInitializer implements CommandLineRunner {
 
         log.info(">>> Data initializer: BD vacia detectada, insertando datos de prueba...");
 
-        Usuario paladin = usuarioRepository.save(new Usuario(
-                null, 20888888L, "K", "Miguel","Angel","Arguello","Quintana", LocalDate.of(2000,7,13)));
+        //Usuario paladin = usuarioRepository.save(new Usuario(
+        //        null, 20888888L, "K", "Miguel","Angel","Arguello","Quintana", LocalDate.of(2000,7,13)));
 
-        Usuario espadachinMago = usuarioRepository.save(new Usuario(
-                null, 888888L, "8", "Ludwig","Joseph","Wittgenstein","X", LocalDate.of(1800,1,1)));
-
+       // Usuario espadachinMago = usuarioRepository.save(new Usuario(
+        //        null, 888888L, "8", "Ludwig","Joseph","Wittgenstein","X", LocalDate.of(1800,1,1)));
 
         Resenia primeraResenia = reseniaRepository.save(
                 new Resenia(null, 100L, "Muy buen libro", LocalDate.of(2026,5,5), 1L));
+
+        Resenia segundaResenia = reseniaRepository.save(
+                new Resenia(null,  50L, "Mas o menos el libro", LocalDate.of(2026,5,16), 2L));
+
+        Resenia terceraResenia = reseniaRepository.save(
+                new Resenia(null, 1L, "Muy malo el libro", LocalDate.of(2026,5,16), 2L));
     }
 
 
