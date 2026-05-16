@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/bibliotecaam/resenias")
@@ -24,6 +25,11 @@ public class ReseniaController {
         return ResponseEntity.ok(reseniaService.listarTodas());
     }
 
+    @GetMapping("/{id}")
+    public ResponseEntity<Optional<ReseniaResponseDTO>> obtenerPorId(@PathVariable Long id){
+        return ResponseEntity.ok(reseniaService.obtenerPorId(id));
+    }
+
     @GetMapping("/puntaje/{puntaje}")
     public ResponseEntity<List<ReseniaResponseDTO>> obtenerPorPuntaje(@PathVariable Long puntaje){
         return ResponseEntity.ok((reseniaService.listarPorPuntaje(puntaje)));
@@ -33,15 +39,14 @@ public class ReseniaController {
     public ResponseEntity<List<ReseniaResponseDTO>> obtenerPorFecha(@PathVariable LocalDate fecha){
         return ResponseEntity.ok(reseniaService.listarPorFecha(fecha));
     }
-    @GetMapping("/usuario/{usuario}")
+    @GetMapping("/usuario/{id}")
     public ResponseEntity<List<ReseniaResponseDTO>> obtenerPorIdUsuario(@PathVariable Long id){
         return ResponseEntity.ok(reseniaService.listarPorUsuario(id));
     }
 
     @PostMapping
-    public ResponseEntity<Resenia> guardar(@Valid @RequestBody Resenia resenia){
-        Resenia nuevaResenia = reseniaService.guardar((resenia));
-        return ResponseEntity.status(201).body(reseniaService.guardar(nuevaResenia));
+    public ResponseEntity<ReseniaResponseDTO> guardar(@Valid @RequestBody ReseniaRequestDTO doto){
+        return ResponseEntity.status(201).body(reseniaService.guardar(doto));
     }
 
     @PutMapping("/{id}")
