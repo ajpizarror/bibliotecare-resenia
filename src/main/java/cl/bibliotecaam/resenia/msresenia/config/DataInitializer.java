@@ -34,13 +34,13 @@ public class DataInitializer implements CommandLineRunner {
         //Usuario espadachinMago = usuarioRepository.save(new Usuario(
         //        null, 888888L, "8", "Ludwig","Joseph","Wittgenstein","X", LocalDate.of(1800,1,1)));
 
-        Resenia primeraResenia = reseniaRepository.save(
+        reseniaRepository.save(
                 new Resenia(null, 100L, "Muy buen libro", LocalDate.of(2026,5,5), 1L));
 
-        Resenia segundaResenia = reseniaRepository.save(
+        reseniaRepository.save(
                 new Resenia(null, 50L, "Mas o menos el libro", LocalDate.of(2026,5,5), 1L));
 
-        Resenia terceraResenia = reseniaRepository.save(
+        reseniaRepository.save(
                 new Resenia(null, 1L, "Pesimo el libro", LocalDate.of(2026,5,5), 1L));
     }
 
