@@ -2,8 +2,6 @@ package cl.bibliotecaam.resenia.msresenia.controller;
 
 import cl.bibliotecaam.resenia.msresenia.dto.ReseniaRequestDTO;
 import cl.bibliotecaam.resenia.msresenia.dto.ReseniaResponseDTO;
-import cl.bibliotecaam.resenia.msresenia.model.Resenia;
-import cl.bibliotecaam.resenia.msresenia.model.Usuario;
 import cl.bibliotecaam.resenia.msresenia.service.ReseniaService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;

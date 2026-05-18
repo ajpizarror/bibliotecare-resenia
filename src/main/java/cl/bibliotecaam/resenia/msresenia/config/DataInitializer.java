@@ -1,9 +1,7 @@
 package cl.bibliotecaam.resenia.msresenia.config;
 
 import cl.bibliotecaam.resenia.msresenia.model.Resenia;
-import cl.bibliotecaam.resenia.msresenia.model.Usuario;
 import cl.bibliotecaam.resenia.msresenia.repository.ReseniaRepository;
-import cl.bibliotecaam.resenia.msresenia.repository.UsuarioRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.CommandLineRunner;
@@ -17,7 +15,6 @@ import java.time.LocalDate;
 public class DataInitializer implements CommandLineRunner {
 
     private final ReseniaRepository reseniaRepository;
-    private final UsuarioRepository usuarioRepository;
 
     @Override
     public void run(String... args){
@@ -42,7 +39,9 @@ public class DataInitializer implements CommandLineRunner {
 
         reseniaRepository.save(
                 new Resenia(null, 1L, "Pesimo el libro", LocalDate.of(2026,5,5), 1L));
+        log.info(">>> Data initializer: 3 Reseñas insertadas exitosamente en la Base de Datos.");
     }
+
 
 
 

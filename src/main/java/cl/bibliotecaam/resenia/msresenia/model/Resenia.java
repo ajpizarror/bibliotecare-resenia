@@ -17,12 +17,19 @@ public class Resenia {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long idResenia;
+
     @Column(nullable = false, length = 3)
     private Long puntaje;
+
     @Column(nullable = false, length = 500)
     private String comentario;
+
     @Column(nullable = false)
     private LocalDate fechaRese;
+
     @Column(nullable = false)
     private Long idUsuario;
+
+    @Column(nullable = false)
+    private Long idLibro;
 }

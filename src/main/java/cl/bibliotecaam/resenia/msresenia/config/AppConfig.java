@@ -9,9 +9,19 @@ public class AppConfig {
     private String usuarioUrl;
 
     @Bean
-    public WebClient webClient(){
+    public WebClient webClientUsuario(){
         return WebClient.builder()
                 .baseUrl(usuarioUrl)
+                .build();
+    }
+
+    @Value("${libro.url}")
+    private String libroUrl;
+
+    @Bean
+    public WebClient webClientLibro(){
+        return WebClient.builder()
+                .baseUrl(libroUrl)
                 .build();
     }
 }

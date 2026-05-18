@@ -3,7 +3,6 @@ package cl.bibliotecaam.resenia.msresenia.service;
 import cl.bibliotecaam.resenia.msresenia.dto.ReseniaRequestDTO;
 import cl.bibliotecaam.resenia.msresenia.dto.ReseniaResponseDTO;
 import cl.bibliotecaam.resenia.msresenia.model.Resenia;
-import cl.bibliotecaam.resenia.msresenia.model.Usuario;
 import cl.bibliotecaam.resenia.msresenia.repository.ReseniaRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -21,7 +20,9 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class ReseniaService {
     private final ReseniaRepository reseniaRepository;
-    private final WebClient webClient;
+    private final WebClient webClientUsuario;
+
+    private final WebClient webClientLibro;
 
     private ReseniaResponseDTO mapToDTO(Resenia resenia){
         return new ReseniaResponseDTO(
@@ -29,24 +30,43 @@ public class ReseniaService {
                 resenia.getPuntaje(),
                 resenia.getComentario(),
                 resenia.getFechaRese(),
-                resenia.getIdUsuario()
+                resenia.getIdUsuario(),
+                resenia.getIdLibro()
         );
     }
 
-    private void validarUsuario(Long usuarioId){
+    private void validarUsuario(Long idUsuario){
         try{
-            webClient.get()
-                    .uri("/api/bibliotecaam/usuarios/id/{id}", usuarioId)
+            webClientUsuario.get()
+                    .uri("/api/bibliotecaam/usuarios/{id}", idUsuario)
                     .retrieve()
                     .bodyToMono(String.class)
                     .block();
-            log.info(">>> Usuario {usuarioId} validado correctamente (WebClient)");
+            log.info(">>> Usuario {} validado correctamente (WebClient)",idUsuario);
         } catch (WebClientResponseException.NotFound e){
             throw new RuntimeException(
-                    "El usuario con id {usuarioId} no existe en Usuario");
+                    "El usuario con id "+ idUsuario +" no existe en Usuario");
         } catch (Exception e) {
             throw new RuntimeException(
                     "No se puede conectar con Usuario: " + e.getMessage());
+        }
+
+    }
+
+    private void validarLibro(Long idLibro){
+        try{
+            webClientUsuario.get()
+                    .uri("/api/bibliotecaam/libro/{id}", idLibro)
+                    .retrieve()
+                    .bodyToMono(String.class)
+                    .block();
+            log.info(">>> Libro {} validado correctamente (WebClient)",idLibro);
+        } catch (WebClientResponseException.NotFound e){
+            throw new RuntimeException(
+                    "El libro con id "+ idLibro+" no existe en la Base de Datos de Libro");
+        } catch (Exception e) {
+            throw new RuntimeException(
+                    "No se puede conectar con Libro: " + e.getMessage());
         }
 
     }
@@ -85,12 +105,14 @@ public class ReseniaService {
 
     public ReseniaResponseDTO guardar(ReseniaRequestDTO doto){
         validarUsuario(doto.getIdUsuario());
+        validarLibro(doto.getIdLibro());
         Resenia resenia = new Resenia(
                 null,
                 doto.getPuntaje(),
                 doto.getComentario(),
                 doto.getFechaRese(),
-                doto.getIdUsuario()
+                doto.getIdUsuario(),
+                doto.getIdLibro()
         );
         return mapToDTO(reseniaRepository.save(resenia));
     }
@@ -102,10 +124,12 @@ public class ReseniaService {
     public Optional<ReseniaResponseDTO> actualizar(Long id, ReseniaRequestDTO doto){
         return reseniaRepository.findById(id).map(existente -> {
             validarUsuario(doto.getIdUsuario());
+            validarLibro(doto.getIdLibro());
             existente.setPuntaje(doto.getPuntaje());
             existente.setComentario(doto.getComentario());
             existente.setFechaRese(doto.getFechaRese());
             existente.setIdUsuario(doto.getIdUsuario());
+            existente.setIdLibro(doto.getIdLibro());
             return mapToDTO(existente);
         });
     }
