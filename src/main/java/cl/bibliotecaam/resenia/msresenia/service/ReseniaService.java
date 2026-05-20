@@ -131,7 +131,7 @@ public class ReseniaService {
             existente.setFechaRese(doto.getFechaRese());
             existente.setIdUsuario(doto.getIdUsuario());
             existente.setIdLibro(doto.getIdLibro());
-            return mapToDTO(existente);
+            return mapToDTO(reseniaRepository.save(existente));
         });
     }
 }
