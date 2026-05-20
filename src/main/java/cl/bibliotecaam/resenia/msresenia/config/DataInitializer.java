@@ -32,13 +32,13 @@ public class DataInitializer implements CommandLineRunner {
         //        null, 888888L, "8", "Ludwig","Joseph","Wittgenstein","X", LocalDate.of(1800,1,1)));
 
         reseniaRepository.save(
-                new Resenia(null, 100L, "Muy buen libro", LocalDate.of(2026,5,5), 1L));
+                new Resenia(null, 100L, "Muy buen libro", LocalDate.of(2026,5,5), 1L,1L));
 
         reseniaRepository.save(
-                new Resenia(null, 50L, "Mas o menos el libro", LocalDate.of(2026,5,5), 1L));
+                new Resenia(null, 50L, "Mas o menos el libro", LocalDate.of(2026,5,5), 1L,1L));
 
         reseniaRepository.save(
-                new Resenia(null, 1L, "Pesimo el libro", LocalDate.of(2026,5,5), 1L));
+                new Resenia(null, 1L, "Pesimo el libro", LocalDate.of(2026,5,5), 1L,1L));
         log.info(">>> Data initializer: 3 Reseñas insertadas exitosamente en la Base de Datos.");
     }
 

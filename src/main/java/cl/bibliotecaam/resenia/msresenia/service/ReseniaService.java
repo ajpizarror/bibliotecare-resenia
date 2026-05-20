@@ -19,6 +19,7 @@ import java.util.stream.Collectors;
 @Service
 @RequiredArgsConstructor
 public class ReseniaService {
+
     private final ReseniaRepository reseniaRepository;
     private final WebClient webClientUsuario;
 
@@ -38,7 +39,7 @@ public class ReseniaService {
     private void validarUsuario(Long idUsuario){
         try{
             webClientUsuario.get()
-                    .uri("/api/bibliotecaam/usuarios/{id}", idUsuario)
+                    .uri("/api/bibliotecaam/usuario/{id}", idUsuario)
                     .retrieve()
                     .bodyToMono(String.class)
                     .block();
@@ -55,7 +56,7 @@ public class ReseniaService {
 
     private void validarLibro(Long idLibro){
         try{
-            webClientUsuario.get()
+            webClientLibro.get()
                     .uri("/api/bibliotecaam/libro/{id}", idLibro)
                     .retrieve()
                     .bodyToMono(String.class)
