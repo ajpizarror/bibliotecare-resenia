@@ -4,6 +4,8 @@ import cl.bibliotecaam.resenia.msresenia.dto.ReseniaRequestDTO;
 import cl.bibliotecaam.resenia.msresenia.dto.ReseniaResponseDTO;
 import cl.bibliotecaam.resenia.msresenia.service.ReseniaService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -23,35 +25,60 @@ public class ReseniaController {
 
     @GetMapping
     @Operation(summary = "Obtener todas las resenias", description = "Obtiene una lista de todas las resenias.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Operación exitosa"),
+            @ApiResponse(responseCode = "404", description = "Resenia no encontrada")
+    })
     public ResponseEntity<List<ReseniaResponseDTO>> obtenerTodas(){
         return ResponseEntity.ok(reseniaService.listarTodas());
     }
 
     @GetMapping("/{id}")
     @Operation(summary = "Obtener resenias por id", description = "Obtiene una resenia acorde a un id.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Operación exitosa"),
+            @ApiResponse(responseCode = "404", description = "Resenia no encontrada")
+    })
     public ResponseEntity<Optional<ReseniaResponseDTO>> obtenerPorId(@PathVariable Long id){
         return ResponseEntity.ok(reseniaService.obtenerPorId(id));
     }
 
     @GetMapping("/puntaje/{puntaje}")
-    @Operation(summary = "Obtener resenias por puntaje", description = "Obtiene una resenia acorde a un puntaje.")
+    @Operation(summary = "Obtener resenias por puntaje", description = "Obtiene una resenia acorde a un puntaje."
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Operación exitosa"),
+            @ApiResponse(responseCode = "404", description = "Resenia no encontrada")
+    })
     public ResponseEntity<List<ReseniaResponseDTO>> obtenerPorPuntaje(@PathVariable Long puntaje){
         return ResponseEntity.ok((reseniaService.listarPorPuntaje(puntaje)));
     }
 
     @GetMapping("/fecha/{fecha}")
     @Operation(summary = "Obtener resenias por fecha", description = "Obtiene una resenia acorde a una fecha.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Operación exitosa"),
+            @ApiResponse(responseCode = "404", description = "Resenia no encontrada")
+    })
     public ResponseEntity<List<ReseniaResponseDTO>> obtenerPorFecha(@PathVariable LocalDate fecha){
         return ResponseEntity.ok(reseniaService.listarPorFecha(fecha));
     }
     @GetMapping("/usuario/{id}")
     @Operation(summary = "Obtener resenias por usuario", description = "Obtiene una resenia acorde a un usuario.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Operación exitosa"),
+            @ApiResponse(responseCode = "404", description = "Resenia no encontrada")
+    })
     public ResponseEntity<List<ReseniaResponseDTO>> obtenerPorIdUsuario(@PathVariable Long id){
         return ResponseEntity.ok(reseniaService.listarPorUsuario(id));
     }
 
     @PostMapping
     @Operation(summary = "Guardar una resenia", description = "Guarda una resenia acorde a lo ingresado.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Operación exitosa."),
+            @ApiResponse(responseCode = "400", description = "Error al ingresar parametros. Revise si ingreso todos los parametros solicitados."),
+            @ApiResponse(responseCode = "403", description = "No tienes permiso para hacer el cambio.")
+    })
     public ResponseEntity<ReseniaResponseDTO> guardar(@Valid @RequestBody ReseniaRequestDTO doto){
         return ResponseEntity.status(201).body(reseniaService.guardar(doto));
     }
