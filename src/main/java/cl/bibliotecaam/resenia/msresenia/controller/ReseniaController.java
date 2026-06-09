@@ -2,8 +2,11 @@ package cl.bibliotecaam.resenia.msresenia.controller;
 
 import cl.bibliotecaam.resenia.msresenia.dto.ReseniaRequestDTO;
 import cl.bibliotecaam.resenia.msresenia.dto.ReseniaResponseDTO;
+import cl.bibliotecaam.resenia.msresenia.model.Resenia;
 import cl.bibliotecaam.resenia.msresenia.service.ReseniaService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -44,7 +47,7 @@ public class ReseniaController {
     }
 
     @GetMapping("/puntaje/{puntaje}")
-    @Operation(summary = "Obtener resenias por puntaje", description = "Obtiene una resenia acorde a un puntaje."
+    @Operation(summary = "Obtener resenias por puntaje", description = "Obtiene una resenia acorde a un puntaje.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Operación exitosa"),
             @ApiResponse(responseCode = "404", description = "Resenia no encontrada")
@@ -85,6 +88,12 @@ public class ReseniaController {
 
     @PutMapping("/{id}")
     @Operation(summary = "Actualizar resenia", description = "Actualiza una resenia acorde a una id.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Resenia actualizada",
+            content = @Content(mediaType = "application/json",
+            schema = @Schema(implementation = Resenia.class))),
+            @ApiResponse(responseCode = "404", description = "El id de la resenia no existe.")
+    })
     public ResponseEntity<ReseniaResponseDTO> actualizar(@PathVariable Long id, @Valid @RequestBody ReseniaRequestDTO doto){
         return reseniaService.actualizar(id, doto)
                 .map(ResponseEntity::ok)
@@ -93,6 +102,10 @@ public class ReseniaController {
 
     @DeleteMapping("/{id}")
     @Operation(summary = "Eliminar resenia", description = "Elimina una resenia acorde a una id.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200",description = "¡Resenia eliminada con exito!"),
+            @ApiResponse(responseCode = "404",description = "ERROR: ¡El id de la resenia ingresada no existe!")
+    })
     public ResponseEntity<Void> eliminar (@PathVariable Long id){
         if (reseniaService.obtenerPorId(id).isEmpty()){
             return ResponseEntity.notFound().build();
