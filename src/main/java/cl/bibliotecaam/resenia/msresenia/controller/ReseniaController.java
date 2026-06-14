@@ -1,5 +1,6 @@
 package cl.bibliotecaam.resenia.msresenia.controller;
 
+import cl.bibliotecaam.resenia.msresenia.assembler.ReseniaModelAssembler;
 import cl.bibliotecaam.resenia.msresenia.dto.ReseniaRequestDTO;
 import cl.bibliotecaam.resenia.msresenia.dto.ReseniaResponseDTO;
 import cl.bibliotecaam.resenia.msresenia.model.Resenia;
@@ -12,12 +13,20 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.hateoas.CollectionModel;
+import org.springframework.hateoas.EntityModel;
+import org.springframework.hateoas.MediaTypes;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
+
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.*;
+
 
 @RestController
 @RequestMapping("/api/bibliotecaam/resenias")
@@ -26,24 +35,35 @@ import java.util.Optional;
 public class ReseniaController {
     private final ReseniaService reseniaService;
 
-    @GetMapping
+    @Autowired
+    private ReseniaModelAssembler assembler;
+
+    @GetMapping(produces = MediaTypes.HAL_JSON_VALUE)
     @Operation(summary = "Obtener todas las resenias", description = "Obtiene una lista de todas las resenias.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Operación exitosa"),
             @ApiResponse(responseCode = "404", description = "Resenia no encontrada")
     })
-    public ResponseEntity<List<ReseniaResponseDTO>> obtenerTodas(){
-        return ResponseEntity.ok(reseniaService.listarTodas());
+    public ResponseEntity<CollectionModel<EntityModel<ReseniaResponseDTO>>> obtenerTodas(){
+        List<EntityModel<ReseniaResponseDTO>> asistencias = reseniaService.listarTodas().stream()
+                .map(assembler::toModel)
+                .collect(Collectors.toList());
+
+        return ResponseEntity.ok(CollectionModel.of(asistencias,
+                linkTo(methodOn(ReseniaController.class).obtenerTodas()).withSelfRel()));
     }
 
-    @GetMapping("/{id}")
+    @GetMapping(value = "/{id}", produces = MediaTypes.HAL_JSON_VALUE)
     @Operation(summary = "Obtener resenias por id", description = "Obtiene una resenia acorde a un id.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Operación exitosa"),
             @ApiResponse(responseCode = "404", description = "Resenia no encontrada")
     })
-    public ResponseEntity<Optional<ReseniaResponseDTO>> obtenerPorId(@PathVariable Long id){
-        return ResponseEntity.ok(reseniaService.obtenerPorId(id));
+    public ResponseEntity<EntityModel<ReseniaResponseDTO>> obtenerPorId(@PathVariable Long id){
+        return reseniaService.obtenerPorId(id)
+                .map(assembler::toModel)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
     }
 
     @GetMapping("/puntaje/{puntaje}")
@@ -52,8 +72,13 @@ public class ReseniaController {
             @ApiResponse(responseCode = "200", description = "Operación exitosa"),
             @ApiResponse(responseCode = "404", description = "Resenia no encontrada")
     })
-    public ResponseEntity<List<ReseniaResponseDTO>> obtenerPorPuntaje(@PathVariable Long puntaje){
-        return ResponseEntity.ok((reseniaService.listarPorPuntaje(puntaje)));
+    public ResponseEntity<CollectionModel<EntityModel<ReseniaResponseDTO>>> obtenerPorPuntaje(@PathVariable Long puntaje){
+        List<EntityModel<ReseniaResponseDTO>> resenias = reseniaService.listarPorUsuario(puntaje).stream()
+                .map(assembler::toModel)
+                .collect(Collectors.toList());
+
+        return ResponseEntity.ok(CollectionModel.of(resenias,
+                linkTo(methodOn(ReseniaController.class).obtenerPorPuntaje(puntaje)).withSelfRel()));
     }
 
     @GetMapping("/fecha/{fecha}")
@@ -62,8 +87,14 @@ public class ReseniaController {
             @ApiResponse(responseCode = "200", description = "Operación exitosa"),
             @ApiResponse(responseCode = "404", description = "Resenia no encontrada")
     })
-    public ResponseEntity<List<ReseniaResponseDTO>> obtenerPorFecha(@PathVariable LocalDate fecha){
-        return ResponseEntity.ok(reseniaService.listarPorFecha(fecha));
+    public ResponseEntity<CollectionModel<EntityModel<ReseniaResponseDTO>>> obtenerPorFecha(@PathVariable LocalDate fecha){
+        List<EntityModel<ReseniaResponseDTO>> resenias = reseniaService.listarPorFecha(fecha).stream()
+                .map(assembler::toModel)
+                .collect(Collectors.toList());
+
+        return ResponseEntity.ok(CollectionModel.of(resenias,
+                linkTo(methodOn(ReseniaController.class).obtenerPorFecha(fecha)).withSelfRel()
+        ));
     }
     @GetMapping("/usuario/{id}")
     @Operation(summary = "Obtener resenias por usuario", description = "Obtiene una resenia acorde a un usuario.")
@@ -71,8 +102,14 @@ public class ReseniaController {
             @ApiResponse(responseCode = "200", description = "Operación exitosa"),
             @ApiResponse(responseCode = "404", description = "Resenia no encontrada")
     })
-    public ResponseEntity<List<ReseniaResponseDTO>> obtenerPorIdUsuario(@PathVariable Long id){
-        return ResponseEntity.ok(reseniaService.listarPorUsuario(id));
+    public ResponseEntity<CollectionModel<EntityModel<ReseniaResponseDTO>>> obtenerPorUsuario(@PathVariable Long id){
+        List<EntityModel<ReseniaResponseDTO>> resenias = reseniaService.listarPorUsuario(id).stream()
+                .map(assembler::toModel)
+                .collect(Collectors.toList());
+
+        return ResponseEntity.ok(CollectionModel.of(resenias,
+                linkTo(methodOn(ReseniaController.class).obtenerPorUsuario(id)).withSelfRel()
+        ));
     }
 
     @PostMapping
@@ -82,8 +119,9 @@ public class ReseniaController {
             @ApiResponse(responseCode = "400", description = "Error al ingresar parametros. Revise si ingreso todos los parametros solicitados."),
             @ApiResponse(responseCode = "403", description = "No tienes permiso para hacer el cambio.")
     })
-    public ResponseEntity<ReseniaResponseDTO> guardar(@Valid @RequestBody ReseniaRequestDTO doto){
-        return ResponseEntity.status(201).body(reseniaService.guardar(doto));
+    public ResponseEntity<EntityModel<ReseniaResponseDTO>> guardar(@Valid @RequestBody ReseniaRequestDTO doto){
+        ReseniaResponseDTO nuevaResenia = reseniaService.guardar(doto);
+        return ResponseEntity.status(201).body(assembler.toModel(nuevaResenia));
     }
 
     @PutMapping("/{id}")
@@ -94,8 +132,9 @@ public class ReseniaController {
             schema = @Schema(implementation = Resenia.class))),
             @ApiResponse(responseCode = "404", description = "El id de la resenia no existe.")
     })
-    public ResponseEntity<ReseniaResponseDTO> actualizar(@PathVariable Long id, @Valid @RequestBody ReseniaRequestDTO doto){
+    public ResponseEntity<EntityModel<ReseniaResponseDTO>> actualizar(@PathVariable Long id, @Valid @RequestBody ReseniaRequestDTO doto){
         return reseniaService.actualizar(id, doto)
+                .map(assembler::toModel)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
