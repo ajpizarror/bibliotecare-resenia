@@ -29,7 +29,7 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.*;
 
 
 @RestController
-@RequestMapping("/api/bibliotecaam/resenias")
+@RequestMapping("/api/bibliotecaam/resenia")
 @RequiredArgsConstructor
 @Tag(name = "Resenias", description = "Operaciones asociadas a resenias.")
 public class ReseniaController {
