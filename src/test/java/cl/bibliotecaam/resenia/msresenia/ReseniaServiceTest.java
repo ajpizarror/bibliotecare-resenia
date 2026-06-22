@@ -43,7 +43,6 @@ class ReseniaServiceTest {
     @MockitoBean(name = "webClientLibro")
     private WebClient webClientLibro;
 
-    // Mocks para la interfaz fluida de WebClient
     @SuppressWarnings("rawtypes")
     private WebClient.RequestHeadersUriSpec requestHeadersUriSpecMock;
     @SuppressWarnings("rawtypes")
